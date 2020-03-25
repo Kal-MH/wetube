@@ -7,9 +7,9 @@ const LOGOUT = "/logout";
 
 //users
 const USERS = "/users";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWARD = "/change-password";
 const USER_DETAIL = "/:id";
-const EDIT_PROFILE = "/:id/edit-profile";
-const CHANGE_PASSWARD = "/:id/change-password";
 
 //videos
 const VIDEOS = "/videos";
