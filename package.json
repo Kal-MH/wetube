@@ -4,28 +4,42 @@
   "description": "Cloning Youtube with Vanilla and NodeJS",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node init.js --delay 2"
+    "dev:server": "nodemon --exec babel-node init.js --delay 2",
+    "dev:assets": "webpack --mode=development -w",
+    "build:assets": "webpack --mode=production webpack"
   },
   "author": "Kal",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.8.7",
     "@babel/node": "^7.8.7",
+    "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "autoprefixer": "^9.7.5",
+    "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
+    "css-loader": "^3.4.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "helmet": "^3.21.3",
     "mongoose": "^5.9.6",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
-    "pug": "^2.0.4"
+    "node-sass": "^4.13.1",
+    "postcss-loader": "^3.0.0",
+    "pug": "^2.0.4",
+    "sass-loader": "^8.0.2",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
-    "nodemon": "^2.0.2"
+    "eslint-plugin-react": "^7.19.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2"
   }
 }

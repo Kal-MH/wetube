@@ -10,12 +10,20 @@ export const home = async (req, res) => {
     res.render("home", { pageTitle: "Home", videos: [] });
   }
 };
-
-export const search = (req, res) => {
+export const search = async (req, res) => {
   //const searchingBy = req.query.term;
   const {
     query: { term: searchingBy }
   } = req;
+  let videos = [];
+  try {
+    videos = await Video.find({
+      title: { $regex: searchingBy, $options: "i" }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(videos, searchingBy);
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
@@ -58,7 +66,7 @@ export const getEditVideo = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.redirect(reouts.home);
+    res.redirect(routes.home);
   }
 };
 

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { text } from "body-parser";
 
 const VideoSchema = new mongoose.Schema({
   fileUrl: {
@@ -19,7 +18,7 @@ const VideoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  Comments: [
+  comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment"
