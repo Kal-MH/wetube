@@ -3,7 +3,11 @@ dotenv.config();
 import passport from "passport";
 import User from "./models/User";
 import GithubStrategy from "passport-github";
-import { githubLoginCallback } from "./controllers/userController";
+import FacebookStrategy from "passport-facebook";
+import {
+  githubLoginCallback,
+  facebookCallback,
+} from "./controllers/userController";
 import routes from "./routes";
 
 passport.use(User.createStrategy());
@@ -16,6 +20,19 @@ passport.use(
       callbackURL: `http://localhost:4000${routes.githubCallback}`,
     },
     githubLoginCallback
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: `https://56fed503.ngrok.io${routes.facebookCallback}`,
+      profileFields: ["id", "displayName", "photos", "email"],
+      scope: ["public_profile", "email"],
+    },
+    facebookCallback
   )
 );
 

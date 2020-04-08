@@ -13,7 +13,18 @@ export const postJoin = async (req, res, next) => {
     res.render("join", { pageTitle: "Join" });
   } else {
     try {
-      const user = await User({
+      // const user = await User.findOne({ email });
+      // if (user) {
+      //   console.log("Already exists");
+      //   res.redirect(routes.home);
+      // } else {
+      //   const newUser = await User.create({
+      //     name,
+      //     email,
+      //   });
+      //   await User.register(newUser, password);
+      // }
+      const user = await User.create({
         name,
         email,
       });
@@ -38,7 +49,7 @@ export const postLogin = passport.authenticate("local", {
 export const githubLogin = passport.authenticate("github");
 export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, avatar_url, name, email },
+    _json: { id, avatar_url: avatarUrl, name, email },
   } = profile;
 
   try {
@@ -52,7 +63,7 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
       name,
       email,
       githubId: id,
-      avatarUrl: avatar_url,
+      avatarUrl,
     });
     return cb(null, newUser);
   } catch (error) {
@@ -63,14 +74,57 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
+//facebook
+export const facebookLogin = passport.authenticate("facebook");
+export const facebookCallback = async (_, __, profile, cb) => {
+  const {
+    _json: { id, name, email },
+  } = profile;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      (user.facebookId = id),
+        (user.avatarUrl = `https://graph.facebook.com/${id}/picture?type=large`),
+        user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      email,
+      name,
+      facebookId: id,
+      avatarUrl: `https://graph.facebook.com/${id}/picture?type=large`,
+    });
+    return cb(null, newUser);
+  } catch (error) {
+    return cb(error);
+  }
+};
+export const postFacebookLogin = (req, res) => {
+  res.redirect(routes.home);
+};
+
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
 };
 
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+};
+export const userDetail = async (req, res) => {
+  console.log(req._passport, req.user);
+  const {
+    params: { id },
+  } = req;
+  try {
+    const user = await User.findById(id);
+    res.render("userDetail", { pageTitle: "User Detail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
+};
 export const editProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "Edit Profile" });
 export const changePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "Change Password" });
-export const userDetail = (req, res) =>
-  res.render("userDetail", { pageTitle: "User Detail" });
